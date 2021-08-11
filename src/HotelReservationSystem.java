@@ -1,11 +1,13 @@
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Ability to add weekday and weekend rates for each Hotel
+ * Ability to find the cheapest hotel for given date range
  * @author Chaitra.NS
  * @since  11-Aug-2021
  */
@@ -40,33 +42,6 @@ public class HotelReservationSystem {
         hotelReservation.displayHotels(hotelList);
     }
 
-    public void findCheapestHotel(ArrayList<Hotel> hotelList) throws DateTimeParseException {
-        System.out.println();
-        System.out.println("Enter start date and end date int the format (yyyy-MM-dd),(yyyy-MM-dd)");
-        Scanner scanner = new Scanner(System.in);
-        String line = scanner.next(); //Storing String type(scanner.next()) in String line
-        String[] input = line.split(","); 
-
-        //LocalDate parse() will give instance of local time.
-        LocalDate startDate = LocalDate.parse(input[0]);
-        LocalDate endDate = LocalDate.parse(input[1]);
-
-        //Calculating Number of days in between
-        int dateDifference=(int) ChronoUnit.DAYS.between(startDate, endDate);
-        int cheapestRate= Integer.MAX_VALUE;
-        String cheapestHotel="";
-
-        for(Hotel hotel : hotelList) {
-            int rateForHotel=dateDifference*hotel.getForWeekDay();
-            if(rateForHotel<cheapestRate) {
-                cheapestRate=rateForHotel;
-                cheapestHotel=hotel.getHotelName();
-            }
-        }
-        if(cheapestRate!=Integer.MAX_VALUE)
-            System.out.println("Cheapest Hotel : \n"+cheapestHotel+", Total Rates: "+cheapestRate);
-    }
-
     public void displayHotels(ArrayList<Hotel> hotelList) {
         if (hotelList.size() == 0)
             System.out.println("No Hotels in the database");
@@ -74,5 +49,48 @@ public class HotelReservationSystem {
             for (Hotel hotel : hotelList)
                 System.out.println(hotel.toString());
         }
+    }
+
+    public void findCheapestHotel(ArrayList<Hotel> hotelList) throws DateTimeParseException {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter start date and end date int the format (yyyy-MM-dd),(yyyy-MM-dd)");
+        String line = scanner.next();
+        String[] input = line.split(",");
+
+        LocalDate startDate = LocalDate.parse(input[0]);
+        LocalDate endDate = LocalDate.parse(input[1]);
+        endDate = endDate.plusDays(1);
+
+        int totalDateDifference = (int) ChronoUnit.DAYS.between(startDate, endDate);
+        System.out.println("totalDateDifference  " + totalDateDifference);
+        int cheapestRate = 999999999;
+        String cheapestHotel = "";
+        int noOfWeekends = 0;
+        int noOfWeekdays = 0;
+
+        while (startDate.compareTo(endDate) != 0) {
+            switch (DayOfWeek.of(startDate.get(ChronoField.DAY_OF_WEEK))) {
+                case SATURDAY:
+                    ++noOfWeekends;
+                    break;
+                case SUNDAY:
+                    ++noOfWeekends;
+                    break;
+            }
+            startDate = startDate.plusDays(1);
+        }
+
+        noOfWeekdays = totalDateDifference - noOfWeekends;
+        for (Hotel hotel : hotelList) {
+            int rateForHotel = (noOfWeekdays * hotel.getForWeekDay())
+                    + (noOfWeekends * hotel.getForWeekEnd());
+            if (rateForHotel < cheapestRate) {
+                cheapestRate = rateForHotel;
+                cheapestHotel = hotel.getHotelName();
+            }
+        }
+        if (cheapestRate != 999999999)
+            System.out.println("Cheapest Hotel : \n" + cheapestHotel + ", Total Rates: " + cheapestRate);
     }
 }
