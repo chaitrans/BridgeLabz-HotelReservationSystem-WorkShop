@@ -4,14 +4,13 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class UC2 {
+/**
+ * Ability to add weekday and weekend rates for each Hotel
+ * @author Chaitra.NS
+ * @since  11-Aug-2021
+ */
 
-    /**
-     * Ability to find the cheapest hotel for given date range.
-     * I/P – 10Sep2020, 11Sep2020 - O/P – Lakewood, Total Rates: $220
-     * @author Chaitra.NS
-     * @since 11-Aug-2021
-     */
+public class HotelReservationSystem {
 
     public static void main(String[] args) {
         System.out.println("WELCOME TO HOTEL RESERVATION PROGRAM");
@@ -22,26 +21,23 @@ public class UC2 {
         lakeWood.setHotelName("LakeWood");
         lakeWood.setForWeekDay(110);
         lakeWood.setForWeekEnd(90);
-        System.out.println(lakeWood);
         hotelList.add(lakeWood);
 
         Hotel bridgeWood = new Hotel();
         bridgeWood.setHotelName("Bridge Wood");
         bridgeWood.setForWeekDay(160);
-        bridgeWood.setForWeekEnd(60);
-        System.out.println(bridgeWood);
+        bridgeWood.setForWeekEnd(50);
         hotelList.add(bridgeWood);
 
         Hotel ridgeWood = new Hotel();
         ridgeWood.setHotelName("Ridge Wood");
         ridgeWood.setForWeekDay(220);
         ridgeWood.setForWeekEnd(150);
-        System.out.println(ridgeWood);
         hotelList.add(ridgeWood);
 
-        UC2 hotelReservation = new UC2();
+        HotelReservationSystem hotelReservation = new HotelReservationSystem();
         hotelReservation.findCheapestHotel(hotelList);
-
+        hotelReservation.displayHotels(hotelList);
     }
 
     public void findCheapestHotel(ArrayList<Hotel> hotelList) throws DateTimeParseException {
@@ -49,7 +45,7 @@ public class UC2 {
         System.out.println("Enter start date and end date int the format (yyyy-MM-dd),(yyyy-MM-dd)");
         Scanner scanner = new Scanner(System.in);
         String line = scanner.next(); //Storing String type(scanner.next()) in String line
-        String[] input = line.split(",");  //split accepts regex and separated by comma.
+        String[] input = line.split(","); 
 
         //LocalDate parse() will give instance of local time.
         LocalDate startDate = LocalDate.parse(input[0]);
@@ -57,7 +53,7 @@ public class UC2 {
 
         //Calculating Number of days in between
         int dateDifference=(int) ChronoUnit.DAYS.between(startDate, endDate);
-        int cheapestRate=999;
+        int cheapestRate= Integer.MAX_VALUE;
         String cheapestHotel="";
 
         for(Hotel hotel : hotelList) {
@@ -67,7 +63,16 @@ public class UC2 {
                 cheapestHotel=hotel.getHotelName();
             }
         }
-        if(cheapestRate!=999)
-            System.out.println("Cheapest Hotel : "+cheapestHotel+", \nTotal Rates: "+cheapestRate);
+        if(cheapestRate!=Integer.MAX_VALUE)
+            System.out.println("Cheapest Hotel : \n"+cheapestHotel+", Total Rates: "+cheapestRate);
+    }
+
+    public void displayHotels(ArrayList<Hotel> hotelList) {
+        if (hotelList.size() == 0)
+            System.out.println("No Hotels in the database");
+        else {
+            for (Hotel hotel : hotelList)
+                System.out.println(hotel.toString());
+        }
     }
 }
