@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Ability to find the cheapest hotel for given date range
+ * Ability to add ratings to each Hotel
  * @author Chaitra.NS
  * @since  11-Aug-2021
  */
@@ -23,23 +23,26 @@ public class HotelReservationSystem {
         lakeWood.setHotelName("LakeWood");
         lakeWood.setForWeekDay(110);
         lakeWood.setForWeekEnd(90);
+        lakeWood.setRating(3);
         hotelList.add(lakeWood);
 
         Hotel bridgeWood = new Hotel();
         bridgeWood.setHotelName("Bridge Wood");
         bridgeWood.setForWeekDay(160);
         bridgeWood.setForWeekEnd(50);
+        bridgeWood.setRating(4);
         hotelList.add(bridgeWood);
 
         Hotel ridgeWood = new Hotel();
         ridgeWood.setHotelName("Ridge Wood");
         ridgeWood.setForWeekDay(220);
         ridgeWood.setForWeekEnd(150);
+        ridgeWood.setRating(5);
         hotelList.add(ridgeWood);
 
         HotelReservationSystem hotelReservation = new HotelReservationSystem();
-        hotelReservation.findCheapestHotel(hotelList);
         hotelReservation.displayHotels(hotelList);
+        hotelReservation.findCheapestHotel(hotelList);
     }
 
     public void displayHotels(ArrayList<Hotel> hotelList) {

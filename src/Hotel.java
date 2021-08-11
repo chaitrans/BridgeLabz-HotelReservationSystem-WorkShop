@@ -2,6 +2,7 @@ public class Hotel {
     private String hotelName;
     private int forWeekDay;
     private int forWeekEnd;
+    private int rating;
 
     public String getHotelName() {
         return hotelName;
@@ -27,12 +28,21 @@ public class Hotel {
         this.forWeekEnd = forWeekEnd;
     }
 
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
+    }
+
     @Override
     public String toString() {
         return "Hotel{" +
                 "hotelName='" + hotelName + '\'' +
                 ", forWeekDay=" + forWeekDay +
                 ", forWeekEnd=" + forWeekEnd +
+                ", rating=" + rating +
                 '}';
     }
 }
