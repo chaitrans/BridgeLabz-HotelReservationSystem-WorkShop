@@ -13,6 +13,7 @@ import java.util.Scanner;
  */
 
 public class HotelReservationSystem {
+    Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
         System.out.println("WELCOME TO HOTEL RESERVATION PROGRAM");
@@ -56,7 +57,6 @@ public class HotelReservationSystem {
 
     public void findCheapestHotel(ArrayList<Hotel> hotelList) throws DateTimeParseException{
 
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Enter start date and end date int the format (yyyy-MM-dd),(yyyy-MM-dd)");
         String line = scanner.next();
         String[] input = line.split(",");
@@ -88,23 +88,74 @@ public class HotelReservationSystem {
         }
 
         noOfWeekdays = totalDateDifference - noOfWeekdends;
+        System.out.println("Check by:");
+        System.out.println("1. Best price");
+        System.out.println("2. Best rating");
+        System.out.println("Enter your choice : ");
+        int choice = scanner.nextInt();
+        switch (choice) {
+
+            case 1:
+                findCheapestBestRatedHotel(noOfWeekdays, noOfWeekdends, hotelList);
+                break;
+            case 2:
+                findBestRatedHotel(noOfWeekdays, noOfWeekdends, hotelList);
+                break;
+            default:
+                System.out.println("Invalid choice entered.");
+        }
+    }
+
+    public void findCheapestBestRatedHotel(int noOfWeekdays, int noOfWeekdends, ArrayList<Hotel> hotelList) {
+        String cheapestHotel = "";
+        int cheapestRate = 999999999;
+        int maxRating = 0;
         for (Hotel hotel : hotelList) {
             int rateForHotel = (noOfWeekdays * hotel.getForWeekDay())
                     + (noOfWeekdends * hotel.getForWeekEnd());
-            int ratingForHotel=hotel.getRating();
-            if (rateForHotel < cheapestRate){
+            int ratingForHotel = hotel.getRating();
+
+            if (rateForHotel < cheapestRate) {
                 cheapestRate = rateForHotel;
                 cheapestHotel = hotel.getHotelName();
-                maxRating=ratingForHotel;
+                maxRating = ratingForHotel;
             } else if (rateForHotel == cheapestRate) {
-                if(hotel.getRating()>maxRating) {
+                if (hotel.getRating() > maxRating) {
                     cheapestHotel = hotel.getHotelName();
-                    maxRating=ratingForHotel;
+                    maxRating = ratingForHotel;
                 }
             }
         }
         if (cheapestRate != 999999999)
-            System.out.println("Cheapest Hotel : \n" + cheapestHotel + ", Rating: "+maxRating+" and Total Rates: " + cheapestRate);
+            System.out.println("Cheapest Best Rated Hotel : \n" + cheapestHotel + ", Rating: " + maxRating
+                    + " and Total Rates: " + cheapestRate);
+        else
+            System.out.println("Total price Limit reached");
+    }
+
+    public void findBestRatedHotel(int noOfWeekdays, int noOfWeekdends, ArrayList<Hotel> hotelList) {
+        String cheapestHotel = "";
+        int cheapestRate = 999999999;
+        int maxRating = 0;
+        for (Hotel hotel : hotelList) {
+            int rateForHotel = (noOfWeekdays * hotel.getForWeekDay())
+                    + (noOfWeekdends * hotel.getForWeekEnd());
+            int ratingForHotel = hotel.getRating();
+
+            if (ratingForHotel > maxRating) {
+                cheapestRate = rateForHotel;
+                cheapestHotel = hotel.getHotelName();
+                maxRating = ratingForHotel;
+            } else if (ratingForHotel == maxRating) {
+                if (rateForHotel < cheapestRate) {
+                    cheapestHotel = hotel.getHotelName();
+                    cheapestRate = rateForHotel;
+                }
+            }
+        }
+        if (cheapestRate != 999999999)
+            System.out.println("Best Rated Hotel : \n" + cheapestHotel + ", Rating: " + maxRating + " and Total Rates: "
+                    + cheapestRate);
         else
             System.out.println("Total price Limit reached");
     }
