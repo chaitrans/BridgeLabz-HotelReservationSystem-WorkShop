@@ -1,8 +1,11 @@
 public class Hotel {
-    private String hotelName;
-    private int forWeekDay;
-    private int forWeekEnd;
-    private int rating;
+
+    String hotelName;
+    int weekdayRateForRegularCustomer;
+    int weekendRateForRegularCustomer;
+    int weekdayRateForRewardCustomer;
+    int weekendRateForRewardCustomer;
+    int rating;
 
     public String getHotelName() {
         return hotelName;
@@ -12,20 +15,20 @@ public class Hotel {
         this.hotelName = hotelName;
     }
 
-    public int getForWeekDay() {
-        return forWeekDay;
+    public int getWeekdayRateForRegularCustomer() {
+        return weekdayRateForRegularCustomer;
     }
 
-    public void setForWeekDay(int forWeekDay) {
-        this.forWeekDay = forWeekDay;
+    public void setWeekdayRateForRegularCustomer(int weekdayRateForRegularCustomer) {
+        this.weekdayRateForRegularCustomer = weekdayRateForRegularCustomer;
     }
 
-    public int getForWeekEnd() {
-        return forWeekEnd;
+    public int getWeekendRateForRegularCustomer() {
+        return weekendRateForRegularCustomer;
     }
 
-    public void setForWeekEnd(int forWeekEnd) {
-        this.forWeekEnd = forWeekEnd;
+    public void setWeekendRateForRegularCustomer(int weekendRateForRegularCustomer) {
+        this.weekendRateForRegularCustomer = weekendRateForRegularCustomer;
     }
 
     public int getRating() {
@@ -36,13 +39,27 @@ public class Hotel {
         this.rating = rating;
     }
 
+    public int getWeekdayRateForRewardCustomer() {
+        return weekdayRateForRewardCustomer;
+    }
+
+    public void setWeekdayRateForRewardCustomer(int weekdayRateForRewardCustomer) {
+        this.weekdayRateForRewardCustomer = weekdayRateForRewardCustomer;
+    }
+
+    public int getWeekendRateForRewardCustomer() {
+        return weekendRateForRewardCustomer;
+    }
+
+    public void setWeekendRateForRewardCustomer(int weekendRateForRewardCustomer) {
+        this.weekendRateForRewardCustomer = weekendRateForRewardCustomer;
+    }
+
     @Override
     public String toString() {
-        return "Hotel{" +
-                "hotelName='" + hotelName + '\'' +
-                ", forWeekDay=" + forWeekDay +
-                ", forWeekEnd=" + forWeekEnd +
-                ", rating=" + rating +
-                '}';
+        return (hotelName + "\t" + weekdayRateForRegularCustomer + "\t" + weekendRateForRegularCustomer + "\t" + rating
+                + "\t" + weekdayRateForRewardCustomer + "\t" + weekendRateForRewardCustomer);
+
     }
+
 }
