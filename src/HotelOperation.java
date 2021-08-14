@@ -6,12 +6,15 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class HotelOperation {
 
     public static final Scanner SC = new Scanner(System.in);
 
     private List<Hotel> hotelList;
+    public static int cheapestRate=999999999;
 
     public HotelOperation() {
         hotelList = new ArrayList<Hotel>();
@@ -111,28 +114,23 @@ public class HotelOperation {
     }
 
     public void findCheapestBestRatedHotel(int customerType, int noOfWeekdays, int noOfWeekdends) {
-        String cheapestHotel = "";
-        int cheapestRate = 999999999;
+        String cheapestBestRatedHotelName = "";
         int maxRating = 0;
-        for (Hotel hotel : hotelList) {
 
-            int rateForHotel = (noOfWeekdays * hotel.getWeekdayRateForCustomer(customerType))
-                    + (noOfWeekdends * hotel.getWeekendRateForCustomer(customerType));
-            int ratingForHotel = hotel.getRating();
+        cheapestRate = hotelList.stream()
+                .map(hotel -> computeRateForHotel(hotel, noOfWeekdays, noOfWeekdends, customerType))
+                .min(Integer::compare).get();
 
-            if (rateForHotel < cheapestRate) {
-                cheapestRate = rateForHotel;
-                cheapestHotel = hotel.getHotelName();
-                maxRating = ratingForHotel;
-            } else if (rateForHotel == cheapestRate) {
-                if (hotel.getRating() > maxRating) {
-                    cheapestHotel = hotel.getHotelName();
-                    maxRating = ratingForHotel;
-                }
-            }
-        }
+        List<Hotel> hotelsWithCheapestRate = hotelList.stream().filter(
+                hotel -> computeRateForHotel(hotel, noOfWeekdays, noOfWeekdends, customerType) == cheapestRate)
+                .collect(Collectors.toList());
+
+        Hotel cheapestBestRatedHotel=hotelsWithCheapestRate.stream().max((h1,h2)->h1.getRating()>h2.getRating()?1:-1).get();
+
+        cheapestBestRatedHotelName=cheapestBestRatedHotel.getHotelName();
+        maxRating=cheapestBestRatedHotel.getRating();
         if (cheapestRate != 999999999)
-            System.out.println("Cheapest Best Rated Hotel : \n" + cheapestHotel + ", Rating: " + maxRating
+            System.out.println("Cheapest Best Rated Hotel : \n" + cheapestBestRatedHotelName + ", Rating: " + maxRating
                     + " and Total Rates: " + cheapestRate);
         else
             System.out.println("Total price Limit reached");
@@ -140,12 +138,10 @@ public class HotelOperation {
 
     public void findBestRatedHotel(int customerType, int noOfWeekdays, int noOfWeekdends) {
         String cheapestHotel = "";
-        int cheapestRate = 999999999;
         int maxRating = 0;
         for (Hotel hotel : hotelList) {
 
-            int rateForHotel = (noOfWeekdays * hotel.getWeekdayRateForCustomer(customerType))
-                    + (noOfWeekdends * hotel.getWeekendRateForCustomer(customerType));
+            int rateForHotel = computeRateForHotel(hotel, noOfWeekdays, noOfWeekdends, customerType);
             int ratingForHotel = hotel.getRating();
 
             if (ratingForHotel > maxRating) {
@@ -164,6 +160,13 @@ public class HotelOperation {
                     + cheapestRate);
         else
             System.out.println("Total price Limit reached");
+    }
+
+    public int computeRateForHotel(Hotel hotel, int noOfWeekdays, int noOfWeekdends, int customerType) {
+        int rateForHotel = 0;
+        rateForHotel = (noOfWeekdays * hotel.getWeekdayRateForCustomer(customerType))
+                + (noOfWeekdends * hotel.getWeekendRateForCustomer(customerType));
+        return rateForHotel;
     }
 
 }
