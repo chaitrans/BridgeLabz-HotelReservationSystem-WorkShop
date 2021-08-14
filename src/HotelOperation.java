@@ -52,6 +52,18 @@ public class HotelOperation {
 
     public void findCheapestHotel() throws DateTimeParseException {
 
+        int customerType = 1;
+        System.out.println("Select type of customer : ");
+        System.out.println("1. Regular");
+        System.out.println("2. Reward");
+        while (true) {
+            customerType = SC.nextInt();
+            if (customerType == 1 || customerType == 2)
+                break;
+            else
+                System.out.println("Invalid customer type selected. Select again : ");
+        }
+
         System.out.println("Enter start date and end date int the format (yyyy-MM-dd),(yyyy-MM-dd)");
         String line = SC.next();
         String[] input = line.split(",");
@@ -61,7 +73,6 @@ public class HotelOperation {
         endDate = endDate.plusDays(1);
 
         int totalDateDifference = (int) ChronoUnit.DAYS.between(startDate, endDate);
-        System.out.println("totalDateDifference  " + totalDateDifference);
 
         int noOfWeekdends = 0;
         int noOfWeekdays = 0;
@@ -89,23 +100,24 @@ public class HotelOperation {
         switch (choice) {
 
             case 1:
-                findCheapestBestRatedHotel(noOfWeekdays, noOfWeekdends);
+                findCheapestBestRatedHotel(customerType, noOfWeekdays, noOfWeekdends);
                 break;
             case 2:
-                findBestRatedHotel(noOfWeekdays, noOfWeekdends);
+                findBestRatedHotel(customerType, noOfWeekdays, noOfWeekdends);
                 break;
             default:
                 System.out.println("Invalid choide entered.");
         }
     }
 
-    public void findCheapestBestRatedHotel(int noOfWeekdays, int noOfWeekdends) {
+    public void findCheapestBestRatedHotel(int customerType, int noOfWeekdays, int noOfWeekdends) {
         String cheapestHotel = "";
         int cheapestRate = 999999999;
         int maxRating = 0;
         for (Hotel hotel : hotelList) {
-            int rateForHotel = (noOfWeekdays * hotel.getWeekdayRateForRegularCustomer())
-                    + (noOfWeekdends * hotel.getWeekendRateForRegularCustomer());
+
+            int rateForHotel = (noOfWeekdays * hotel.getWeekdayRateForCustomer(customerType))
+                    + (noOfWeekdends * hotel.getWeekendRateForCustomer(customerType));
             int ratingForHotel = hotel.getRating();
 
             if (rateForHotel < cheapestRate) {
@@ -126,13 +138,14 @@ public class HotelOperation {
             System.out.println("Total price Limit reached");
     }
 
-    public void findBestRatedHotel(int noOfWeekdays, int noOfWeekdends) {
+    public void findBestRatedHotel(int customerType, int noOfWeekdays, int noOfWeekdends) {
         String cheapestHotel = "";
         int cheapestRate = 999999999;
         int maxRating = 0;
         for (Hotel hotel : hotelList) {
-            int rateForHotel = (noOfWeekdays * hotel.getWeekdayRateForRegularCustomer())
-                    + (noOfWeekdends * hotel.getWeekendRateForRegularCustomer());
+
+            int rateForHotel = (noOfWeekdays * hotel.getWeekdayRateForCustomer(customerType))
+                    + (noOfWeekdends * hotel.getWeekendRateForCustomer(customerType));
             int ratingForHotel = hotel.getRating();
 
             if (ratingForHotel > maxRating) {
